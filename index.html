@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Expense Tracker</title>
+        <link rel="stylesheet" href="style.css">
+    </head>
+    <body>
+        <div class="container">
+            <nav class="navbar">
+                <h2 class="logo">Expense Tracker</h2>
+                <ul class="nav-links">
+                    <li><a href="#home">Home</a></li>
+                    <li><a href="#past-transactions">Past Transactions</a></li>
+                    <li><a href="#compare">Compare</a></li>
+                    <li><a href="#add-transaction">Add Transaction</a></li>
+                    <li><a href="#settings">Settings</a></li>
+                </ul>
+                <div class="remaining-budget">
+                    <p id="rembudget">Remaining budget : 500</p>
+                </div>
+            </nav>
+            <main class="content">
+                <section id="home">
+                    <div class="charts">
+                        <div class="pie-chart">
+
+                        </div>
+                        <div class="line-graph">
+
+                        </div>
+                    </div>
+                    <div class="transactions">
+                        <h2>Past Transactions</h2>
+                        <table class="table1">
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Type</th>
+                                    <th>Amount</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+                <section id="past-transactions">
+                        <table class="past-transactions-table">
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Type</th>
+                                    <th>Amount</th>
+                                    <th>Mode of payment</th>
+                                    <th>Description</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                </section>
+                <section id="compare">
+
+                </section>
+                <section id="add-transaction">
+                    <div class="entries">
+                        <table>
+                            <tr>
+                                <td>Date : </td>
+                                <td><input type="date" id="transaction-date"></td>
+                            </tr>
+                            <tr>
+                                <td>Amount : </td>
+                                <td><input type="number" id="transaction-amount"  name="amount" placeholder="Enter amount"></td>
+                            </tr>
+                            <tr>
+                                <td>Type : </td>
+                                <td>
+                                    <select id="transaction-type">
+                                        <option>A</option>
+                                    </select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Mode of payment : </td>
+                                <td>
+                                    <select id="transaction-mode">
+                                        <option value="online">Online</option>
+                                        <option value="cash">Cash</option>
+                                    </select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Description : </td>
+                                <td><input type="text" id="transaction-description"></td>
+                            </tr>
+                        </table>
+                        <input type="submit" id="submit-transaction">
+                    </div>
+                </section>
+                <section id="settings">
+                    <h2>Settings</h2>
+                    <div class="settings-content">
+                        <label for="budget-input">Set your budget : </label>
+                        <input type="number" id="budget-input" placeholder="Enter your budget">
+                        <button id="update-budget">Update budget</button>
+                    </div>
+                </section>
+            </main>
+        </div>
+        <script src="script.js"></script>
+    </body>
+</html>
