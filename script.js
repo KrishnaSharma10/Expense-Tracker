@@ -12,7 +12,7 @@ document.getElementById('submit-transaction').addEventListener('click', function
         amount: amount,
         type: type,
         mode: mode,
-        description: description
+        description: description,
     };
 
     let transactions = JSON.parse(localStorage.getItem('transactions')) || [];
@@ -20,6 +20,34 @@ document.getElementById('submit-transaction').addEventListener('click', function
     localStorage.setItem('transactions', JSON.stringify(transactions));
     addTransactionToTable(transaction);
 });
+
+function getTransactionsbymonth(transactions){
+    let months = {};
+
+    transactions.forEach(function(transaction){
+        let month = transaction.date.slice(0,7);
+        if(!months[month]){
+            months[month]=[];
+        }
+        months[month].push(transaction);
+    });
+
+    return months;
+}
+
+function getTransactionsbyday(transactions){
+    let days = {};
+
+    transactions.forEach(function(transaction){
+        let day = transaction.date;
+        if(!days[day]){
+            days[day]=[];
+        }
+        days[day].push(transaction);
+    });
+
+    return days;
+}
 
 function addTransactionToTable(transaction) {
     const newRow = document.createElement('tr');
@@ -40,10 +68,12 @@ function addTransactionToTable(transaction) {
     });
 
     document.querySelector('#past-transactions .past-transactions-table tbody').appendChild(newRow);
+    
     let remainingbudget = localStorage.getItem('remainingbudget');
     remainingbudget -= transaction.amount;
     document.getElementById('rembudget').textContent=`Remaining Budget : ${remainingbudget}`;
     localStorage.setItem('remainingbudget',remainingbudget);
+
 }
 
 function budgetupdate(){
@@ -73,11 +103,12 @@ function deletetransaction(row, transaction){
 }
 
 document.addEventListener('DOMContentLoaded', function() {
+    document.querySelector('#submit-budget').onclick = budgetupdate;
+
     let transactions = JSON.parse(localStorage.getItem('transactions')) || [];
     let initialBudget = parseFloat(localStorage.getItem('budget')) || 0;
     let remainingbudget = initialBudget;
-    const comparebudget = 0.5 * initialBudget;
-
+    
     transactions.forEach(transaction => {
         addTransactionToTable(transaction, false); // Add the transaction without updating the budget
         remainingbudget -= parseFloat(transaction.amount);
@@ -85,10 +116,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
     document.getElementById('rembudget').textContent = `Remaining Budget : ${remainingbudget}`;
     localStorage.setItem('remainingbudget',remainingbudget);
-    document.querySelector('#submit-budget').onclick = budgetupdate;
 
     document.getElementById('delete-transaction-btn').addEventListener('click',function(){
         deletemode = !deletemode;
     });
-});
 
+});

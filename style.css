@@ -215,13 +215,15 @@ section {
     line-height: 1;
     transition: transform 200ms,background 200ms;
     background: transparent;
-    color: #000000;
+    color: #0c0d0d;
     box-shadow: 0 0 0 3px #000000 inset;
     margin-top: 20px;
 }
 
 #submit-budget:hover{
     transform: translateY(-2px);
+    color: #fff;
+    background-color: #0c0d0d;
 }
 
 
