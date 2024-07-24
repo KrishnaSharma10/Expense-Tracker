@@ -5,7 +5,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Expense Tracker</title>
         <link rel="stylesheet" href="style.css">
-        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> 
     </head>
     <body>
         <div class="container">
@@ -24,14 +24,7 @@
             </nav>
             <main class="content">
                 <section id="home">
-                    <div class="charts">
-                        <div class="pie-chart">
-
-                        </div>
-                        <div class="line-graph">
-
-                        </div>
-                    </div>
+                    <p id="display-date"></p>
                 </section>
                 <section id="past-transactions">
                         <table class="past-transactions-table">
@@ -52,6 +45,14 @@
                         </div>
                 </section>
                 <section id="compare">
+                    <div>
+                        <canvas id="myChart"></canvas>
+                        <div class="chartbuttons">
+                            <button id="linechart">Line Chart</button>
+                            <button id="piechart">Pie Chart</button>
+                            <button id="barchart">Bar Chart</button>
+                        </div>
+                    </div>
                 </section>
                 <section id="add-transaction">
                     <div class="entries">
@@ -103,6 +104,7 @@
                 </section>
             </main>
         </div>
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
         <script src="script.js"></script>
     </body>
 </html>

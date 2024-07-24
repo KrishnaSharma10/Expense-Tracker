@@ -1,4 +1,5 @@
 let deletemode = false;
+let currentChart = null;
 
 document.getElementById('submit-transaction').addEventListener('click', function() {
     const date = document.getElementById('transaction-date').value;
@@ -108,6 +109,13 @@ document.addEventListener('DOMContentLoaded', function() {
     let transactions = JSON.parse(localStorage.getItem('transactions')) || [];
     let initialBudget = parseFloat(localStorage.getItem('budget')) || 0;
     let remainingbudget = initialBudget;
+
+    const currentdate = new Date();
+    const year = currentdate.getFullYear();
+    const month = String(currentdate.getMonth() + 1).padStart(2, '0'); // Months are 0-based
+    const day = String(currentdate.getDate()).padStart(2, '0');
+    const formattedDate = `${day}-${month}-${year}`; // Format: YYYY-MM-DD
+    document.getElementById("display-date").innerHTML = formattedDate;
     
     transactions.forEach(transaction => {
         addTransactionToTable(transaction, false); // Add the transaction without updating the budget
@@ -121,4 +129,74 @@ document.addEventListener('DOMContentLoaded', function() {
         deletemode = !deletemode;
     });
 
+    document.getElementById('linechart').addEventListener('click',function(){
+        const groupedbyday = getTransactionsbyday(transactions);
+        let labels = Object.keys(groupedbyday);
+        labels = labels.sort((a, b) => new Date(a) - new Date(b));
+        const data = labels.map(day => groupedbyday[day].reduce((sum, transaction) => sum + parseFloat(transaction.amount), 0)); 
+        const ctx= document.getElementById("myChart").getContext('2d');
+        if(currentChart){
+            currentChart.destroy();
+        }
+        currentChart=new Chart(ctx, {
+            type: 'line',
+            data: {
+               labels: labels,
+               datasets: [{
+               label: 'Amount Spent',
+               data: data,
+               borderWidth: 1
+               }]
+            },
+            options: {
+               scales: {
+                y: {
+                  beginAtZero: true
+                  }
+                }
+            }
+        });
+     });
+    
+    document.getElementById('barchart').addEventListener('click',function(){
+        const groupedbymonth = getTransactionsbymonth(transactions);
+        let labels = Object.keys(groupedbymonth);
+        const data = labels.map(month => groupedbymonth[month].reduce((sum, transaction) => sum + parseFloat(transaction.amount), 0)); 
+        const ctx= document.getElementById("myChart").getContext('2d');
+        if(currentChart){
+            currentChart.destroy();
+        }
+        currentChart=new Chart(ctx, {
+            type: 'bar',
+            data: {
+               labels: labels,
+               datasets: [{
+                label: 'Amount Spent',
+                data: data,
+                borderWidth: 1,
+                backgroundColor: 'rgba(75, 192, 192, 0.2)', // Light color for bars
+                borderColor: 'rgba(75, 192, 192, 1)' // Darker color for borders
+               }]
+            },
+            options: {
+               scales: {
+                y: {
+                  beginAtZero: true
+                  }
+                }
+            }
+        });
+    });
+
+    document.getElementById('piechart').addEventListener('click',function(){
+        if(currentChart){
+            currentChart.destroy();
+        }
+        currentChart = newChart(ctx,{
+            type : 'doughnut',
+            data : {
+                
+            }
+        })
+    })
 });
