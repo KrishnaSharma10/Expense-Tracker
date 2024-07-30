@@ -1,5 +1,18 @@
 let deletemode = false;
 let currentChart = null;
+setInterval(randomquotegenerator,10000)
+
+function randomquotegenerator(){
+    fetch("https://type.fit/api/quotes").then(function(response){
+        return response.json();
+    })
+    .then(function(data){
+        const randomIndex = Math.floor(Math.random() * data.length);
+        const randomQuote = data[randomIndex].text;
+        const author = data[randomIndex].author || "Unknown"; 
+        document.querySelector('.write').innerHTML = `"${randomQuote}"`;
+    })
+};
 
 document.getElementById('submit-transaction').addEventListener('click', function() {
     const date = document.getElementById('transaction-date').value;
@@ -74,7 +87,7 @@ function addTransactionToTable(transaction) {
     remainingbudget -= transaction.amount;
     document.getElementById('rembudget').textContent=`Remaining Budget : ${remainingbudget}`;
     localStorage.setItem('remainingbudget',remainingbudget);
-
+    document.getElementById('remainingbudgethome').textContent = `Remaining Budget : ${remainingbudget}`;
 }
 
 function budgetupdate(){
@@ -84,6 +97,8 @@ function budgetupdate(){
         document.getElementById('rembudget').textContent=`Remaining Budget : ${budget}`;
         localStorage.setItem('remainingbudget',budget);
     }
+    document.getElementById('totalbudgethome').textContent = `Total Budget : ${budget}`;
+    document.getElementById('remainingbudgethome').textContent = `Remaining Budget : ${budget}`;
 }
 
 function deletetransaction(row, transaction){
@@ -104,23 +119,20 @@ function deletetransaction(row, transaction){
 }
 
 document.addEventListener('DOMContentLoaded', function() {
+    randomquotegenerator();
+
     document.querySelector('#submit-budget').onclick = budgetupdate;
 
     let transactions = JSON.parse(localStorage.getItem('transactions')) || [];
     let initialBudget = parseFloat(localStorage.getItem('budget')) || 0;
     let remainingbudget = initialBudget;
-
-    const currentdate = new Date();
-    const year = currentdate.getFullYear();
-    const month = String(currentdate.getMonth() + 1).padStart(2, '0'); // Months are 0-based
-    const day = String(currentdate.getDate()).padStart(2, '0');
-    const formattedDate = `${day}-${month}-${year}`; // Format: YYYY-MM-DD
-    document.getElementById("display-date").innerHTML = formattedDate;
+    document.getElementById('totalbudgethome').textContent = `Total Budget : ${initialBudget}`;
     
     transactions.forEach(transaction => {
         addTransactionToTable(transaction, false); // Add the transaction without updating the budget
         remainingbudget -= parseFloat(transaction.amount);
     });
+    document.getElementById('remainingbudgethome').textContent = `Remaining Budget : ${remainingbudget}`;
 
     document.getElementById('rembudget').textContent = `Remaining Budget : ${remainingbudget}`;
     localStorage.setItem('remainingbudget',remainingbudget);
@@ -128,6 +140,7 @@ document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('delete-transaction-btn').addEventListener('click',function(){
         deletemode = !deletemode;
     });
+ 
 
     document.getElementById('linechart').addEventListener('click',function(){
         const groupedbyday = getTransactionsbyday(transactions);
@@ -187,16 +200,4 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     });
-
-    document.getElementById('piechart').addEventListener('click',function(){
-        if(currentChart){
-            currentChart.destroy();
-        }
-        currentChart = newChart(ctx,{
-            type : 'doughnut',
-            data : {
-                
-            }
-        })
-    })
 });
